@@ -1,8 +1,9 @@
 class TasksController < ApplicationController
   before_action :find_task, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, except: [:index, :show, :edit, :update, :destroy]
 
   def index
-    @tasks = current_user.tasks.all.order("created_at DESC")
+    @tasks = current_user.tasks.order("created_at DESC") if user_signed_in?
   end
 
   def show
@@ -45,7 +46,7 @@ class TasksController < ApplicationController
     end
 
     def find_task
-      @task = current_user.tasks.all.find(params[:id])
+      @task = current_user.tasks.find(params[:id])
     end
 
 end
