@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-  before_action :find_task, only: [:show, :edit, :update, :destroy]
+  before_action :find_task, only: [:show, :edit, :update, :destroy, :complete]
   before_action :authenticate_user!, except: [:index, :show, :edit, :update, :destroy]
 
   def index
@@ -37,6 +37,11 @@ class TasksController < ApplicationController
   def destroy
     @task.destroy
     redirect_to root_path, notice: "Task deleted!"
+  end
+
+  def complete
+    @item.update_attribute(:completed_at, Time.now)
+    redirect_to root_path
   end
 
   private
