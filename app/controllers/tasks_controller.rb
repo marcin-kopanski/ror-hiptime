@@ -2,18 +2,18 @@ class TasksController < ApplicationController
   before_action :find_task, only: [:show, :edit, :update, :destroy]
 
   def index
-    @tasks = Task.all.order("created_at DESC")
+    @tasks = current_user.tasks.all.order("created_at DESC")
   end
 
   def show
   end
 
   def new
-    @task = Task.new
+    @task = current_user.tasks.build
   end
 
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.build(task_params)
 
     if @task.save
       redirect_to @task, notice: "Task successfuly created!"
@@ -45,7 +45,7 @@ class TasksController < ApplicationController
     end
 
     def find_task
-      @task = Task.find(params[:id])
+      @task = current_user.tasks.all.find(params[:id])
     end
 
 end
