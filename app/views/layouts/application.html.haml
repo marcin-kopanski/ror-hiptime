@@ -1,0 +1,36 @@
+!!! 5
+%html
+  %head
+    %title Hiptime
+    %meta{:charset => "utf-8"}
+    %meta{:name => "viewport", "content" => "width=device-width, initial-scale=1, shrink-to-fit=no"}
+
+    = csrf_meta_tags
+
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+
+  %body
+    %nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+      .container
+        = link_to "Hiptime", root_path, class: "navbar-brand"
+
+        %button.navbar-toggler{:type => "button", "data-toggle" => "collapse", "data-target" => "#navbarNavAltMarkup", "aria-controls" => "navbarNavAltMarkup", "aria-expanded" => "false", "aria-label" => "Toggle navigation"}
+          %span.navbar-toggler-icon
+        #navbarNavAltMarkup.collapse.navbar-collapse
+          .navbar-nav.ml-auto
+            - if user_signed_in?
+              = link_to "Edit User", edit_user_registration_path, class: "nav-item nav-link"
+              = link_to "Sign Out", destroy_user_session_path, method: :delete, class: "nav-item nav-link"
+
+            -else
+              = link_to "Join", new_user_registration_path, class: "nav-item nav-link"
+              = link_to "Log In", new_user_session_path, class: "nav-item nav-link"
+
+    .container.my-4
+      - unless flash.empty?
+        - flash.each do |name, msg|
+          = content_tag :div, msg, class: "alert alert-info"
+        %hr.mb-4
+
+      = yield
