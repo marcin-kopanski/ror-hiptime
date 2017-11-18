@@ -17,7 +17,7 @@ class TasksController < ApplicationController
     @task = current_user.tasks.build(task_params)
 
     if @task.save
-      redirect_to @task, notice: "Task successfuly created!"
+      redirect_to @task, notice: "Task successfully created!"
     else
       render :new
     end
@@ -28,7 +28,7 @@ class TasksController < ApplicationController
 
   def update
     if @task.update(task_params)
-      redirect @task, notice: "Task successfuly updated!"
+      redirect @task, notice: "Task successfully updated!"
     else
       render :edit
     end
@@ -40,8 +40,13 @@ class TasksController < ApplicationController
   end
 
   def complete
-    @item.update_attribute(:completed_at, Time.now)
-    redirect_to root_path
+    if @task.completed?
+      @task.update_attribute(:completed_at, nil)
+      redirect_to root_path, notice: "Task successfully updated!"
+    else
+      @task.update_attribute(:completed_at, Time.now)
+      redirect_to root_path, notice: "Task completed!"
+    end
   end
 
   private

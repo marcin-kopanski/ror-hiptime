@@ -1,6 +1,44 @@
 - if user_signed_in?
   - @tasks.each do |task|
-    %h2= link_to task.title, task
-    %p.text-justify= task.description
+    - if task.completed?
+      .row
+        .col-md-1
+          = link_to complete_task_path(task), method: :patch do
+            = fa_icon "check-square-o 2x"
+
+        .col-md-1
+          = link_to task, method: :delete, data: { confirm: "Are you sure?" } do
+            = fa_icon "trash-o 2x"
+
+        .col-md-10
+          %h2.opacity-05
+            %strike
+              = link_to task.title, task
+          %p.text-justify.opacity-05= task.description
+          %p.lead.opacity-05
+            %small
+              Completed
+              = time_ago_in_words(task.completed_at)
+              ago
+
+    - else
+      .row
+        .col-md-1
+          = link_to complete_task_path(task), method: :patch do
+            = fa_icon "square-o 2x"
+
+        .col-md-10
+          %h2= link_to task.title, task
+          %p.text-justify= task.description
+          %p.lead
+            %small
+              Created
+              = time_ago_in_words(task.created_at)
+              ago
+
+        .col-md-1
+          = link_to task, method: :delete, data: { confirm: "Are you sure?" } do
+            = fa_icon "trash-o 2x"
+
 - else
   = render "welcome"
